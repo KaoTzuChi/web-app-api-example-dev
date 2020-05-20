@@ -1,0 +1,87 @@
+FROM python:latest
+
+# Set environment variables
+ENV PYTHONUNBUFFERED 1
+
+COPY requirements.txt /
+
+RUN pip install --upgrade pip
+# Install dependencies.
+RUN pip install -r /requirements.txt
+
+# Set work directory.
+RUN mkdir /appcode
+WORKDIR /appcode
+
+# Copy project appcode.
+COPY . /appcode/
+
+EXPOSE 5678
+
+
+# $ service docker start
+# $ docker kill $(docker ps -qa)
+# $ docker rm -f $(docker ps -qa)
+
+#[BUILD IMAGE]
+# $ cd ~/app-source/09-app-test/mywebapp
+# $ docker build --tag='python:mywebapp' --file='./Dockerfile-python' .
+# $ docker run -ti python:mywebapp django-admin.py startproject mywebapp
+# $ docker ps -a
+# $ docker cp 64b71781395f:./appcode/. ~/app-source/09-temp/temp
+# $ docker cp 64b71781395f:./usr/local/lib/python3.8/site-packages/firebase ~/app-source/09-temp/temp
+
+#[FIX firebase]
+# $pip install python-firebase
+# $ docker cp ~/app-source/09-app-test/fixpackage/. 6bb153326813:./usr/local/lib/python3.8/site-packages/firebase
+
+
+#[RUN]
+# $ docker run -it --rm -p 5678:5678 python:mywebapp python manage_dev.py runserver 0.0.0.0:5678
+# $ docker-compose exec django-service python manage_dev.py runserver 0.0.0.0:5678
+
+# $ docker-compose up
+# $ docker-compose exec django-service python manage_dev.py migrate
+
+#[INIT DATABASE]
+# $ docker-compose exec mongo-service mongo -u "root" -p "123456789" --authenticationDatabase "admin"
+# >> load("data/db/initial-database.js")
+
+# $ git init
+# $ cd ~/app-source/09-app-test && git add mywebapp && git add webserver && git add docker-compose.yml && git add ./database/initial-database.js
+# $ git commit -m "v0.base"
+# $ git remote add "v0.base" https://github.com/KaoTzuChi/app-test.git
+# $ git push -u "v0.base" master
+
+
+# $ git init
+# $ cd ~/app-source/10-avl-exam && git add mywebapp && git add webserver && git add docker-compose.yml && git add ./database/initial-database.js
+# $ git commit -m "v0.base"
+# $ git remote add "v0.base" https://github.com/KaoTzuChi/avl-exam.git
+# $ git push -u "v0.base" master
+
+
+# $ docker-compose exec django-service python --version
+# $ docker-compose exec django-service pip --version
+# $ docker-compose exec django-service pip show django
+# $ docker-compose exec django-service pip show djangorestframework
+# $ docker-compose exec django-service pip show pymongo
+# $ docker-compose exec django-service pip show django-cors-headers
+# $ docker-compose exec django-service pip show psycopg2
+# $ docker-compose exec django-service pip show google-api-python-client
+# $ docker-compose exec django-service pip show google-auth-httplib2
+# $ docker-compose exec django-service pip show google-auth-oauthlib
+
+# Python 3.8.2
+# pip 20.1 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
+# Django Version: 3.0.6
+# djangorestframework Version: 3.11.0
+# pymongo Version: 3.10.1
+# django-cors-headers Version: 3.2.1
+# psycopg2 Version: 2.8.5
+# google-api-python-client Version: 1.8.2
+# google-auth-httplib2 Version: 0.0.3
+# google-auth-oauthlib Version: 0.4.1
+
+#/appcode/services/firebaseapi/firebaseapi.py
+#/usr/local/lib/python3.8/site-packages/

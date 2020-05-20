@@ -1,0 +1,119 @@
+<!---
+layout: examples
+title: Jumbotron Template
+extra_css: "jumbotron.css"
+--->
+
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Data Query){% endblock %}
+
+{% block content %}
+<main role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h2 class="display-5">Data Management : Query</h2>
+      <p>All fields are required. No validation now.</p>
+      
+    </div>
+  </div>
+  <div class="container">
+    <div class="input-group mb-3 " action="/data/search/" method="post" novalidate>
+      
+      <select class="custom-select col-3" id="searchfield" name="field">
+        <option value="field11">field11</option>
+        <!--
+          <option value="field12">field12</option>
+        <option value="field13">field13</option>
+        <option value="field14">field14</option> _parent -->
+        <option value="field15">field15</option>
+        
+      </select>
+      <input type="text" class="form-control" id="searchvalue" name="value">
+      <div class="input-group-append">
+        <a class="btn btn-outline-secondary" role="button" id="searchbutton" href="#" target="_top" >Search</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <!-- Example row of columns -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">String</th>
+          <th scope="col">Dictionary</th>
+          <th scope="col">Datetime</th>
+          <th scope="col">Number</th>
+          <th scope="col">List</th>
+          <th scope="col">Manage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if receiveddata %}
+          <p class="text-right">Total {{ receiveddata|length }} records.
+            &nbsp;&nbsp;
+            <a class="btn btn-outline-success col-2" href="{% url 'data_create' %}" role="button">Create New</a>
+            &nbsp;&nbsp;
+            <a class="btn btn-outline-success col-2" href="{% url 'data_query' %}" role="button">Query All</a>
+          </p>
+          {% for dataitem in receiveddata %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ dataitem.field11 }}</td>
+            <td>
+              {% for k in dataitem.field12 %}
+                <p>{{ k }} : {{ dataitem.field12|dict_key:k }}</p>
+              {% endfor %}
+            </td>
+            <td>{{ dataitem.field13 }}</td>
+            <td>{{ dataitem.field14 }}</td>
+            <td >
+              {% for opt in chkoptions %}
+                <p>
+                  {% if opt in dataitem.field15 %}
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" disabled checked />
+                  {% else %}
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" disabled />
+                  {% endif %}
+                  <label class="form-check-label" for="defaultCheck1">{{opt}}</label>
+                </p>
+              {% endfor %}
+            </td>
+            <td>
+              <form class="needs-validation" action="/data/delete_action/" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" id="objectid.{{ dataitem.objectid }}" name="objectid" value="{{ dataitem.objectid }}" required>
+                <button class="btn btn-outline-primary" type="submit">Delete</button>
+                <a class="btn btn-outline-primary" href="{% url 'data_update' dataitem.objectid %}" role="button">Update</a>
+                <a class="btn btn-outline-primary" href="{% url 'data_detail' dataitem.objectid %}" role="button">Detail</a>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+    <hr>
+  </div> <!-- /container -->
+
+
+</main>
+<script type="text/javascript">
+
+document.getElementById('searchbutton').addEventListener('click', function (){
+    //console.log( document.getElementById('searchvalue').value)
+    //console.log( document.getElementById('searchfield').value)
+  if(document.getElementById('searchvalue').value.trim().length>0){
+    document.getElementById('searchbutton').href = "/data/search/"
+      + document.getElementById('searchfield').value + "/"
+      + document.getElementById('searchvalue').value.trim();
+  }
+})
+
+</script>
+{% endblock %}
+

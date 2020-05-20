@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Member Logout){% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <div class="container">
+    <h2 class="display-5">Member Management : Logout</h2>
+    <p>All fields are required. No validation now.</p>    
+  </div>
+</div>
+
+<div class="container text-center">
+  {% if logout_data %}
+  <form class="form-signin " action="/member/logout_action/" method="post" novalidate >
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="username" class="sr-only">User Name</label>
+      <input type="text" id="username" name="username" value="{{ logout_data.username }}" class="form-control" readonly >
+    </div>
+
+    {% if logout_msg %}
+    <div class="alert alert-info" role="alert">
+      {{ logout_msg }}
+    </div>
+    {% endif %}
+    <br />
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit" {{ logout_tag }} >Logout</button>
+
+  </form>
+  <br />
+  <hr />
+  {% endif %}
+</div>
+
+
+{% endblock %}

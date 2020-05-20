@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Member Login){% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <div class="container">
+    <h2 class="display-5">Member Management : Login</h2>
+    <p>All fields are required. No validation now.</p>    
+  </div>
+</div>
+
+<div class="container text-center">
+  {% if login_data %}
+  <form class="form-signin " action="/member/login_action/" method="post" novalidate >
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="username" class="sr-only">User Name</label>
+      <input type="text" id="username" name="username" value="{{ login_data.username }}" placeholder="username" class="form-control" required autofocus {{ login_tag }} >
+    </div>
+    <div class="mb-3">
+      <label for="password" class="sr-only">Password</label>
+      <input type="password" id="password" name="password" value="{{ login_data.password }}" placeholder="password"  class="form-control"required autofocus {{ login_tag }}>        
+    </div>
+
+    {% if login_msg %}
+    <div class="alert alert-info" role="alert">
+      {{ login_msg }}
+    </div>
+    {% endif %}
+    <br />
+
+    <input type="hidden" id="email" name="email" value="email">
+    <input type="hidden" id="first_name" name="first_name" value="first_name">
+    <input type="hidden" id="last_name" name="last_name" value="last_name">
+    <input type="hidden" id="last_login" name="last_login" value="last_login">
+    <input type="hidden" id="date_joined" name="date_joined" value="date_joined">
+    <input type="hidden" id="is_staff" name="is_staff" value="is_staff">
+    <input type="hidden" id="is_superuser" name="is_superuser" value="is_superuser">
+    <input type="hidden" id="is_active" name="is_active" value="is_active">
+    <input type="hidden" id="auth_token" name="auth_token" value="auth_token">
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit" {{ login_tag }} >Login</button>
+
+  </form>
+  <br />
+  <hr />
+  {% endif %}
+</div>
+
+
+{% endblock %}

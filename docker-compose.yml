@@ -1,0 +1,63 @@
+version: '3.7' 
+services: 
+    django-service:
+      build:
+        context: ./mywebapp
+        dockerfile: Dockerfile-python
+      container_name: ctn-django
+      image: python:mywebapp
+      command: python manage_dev.py runserver 0.0.0.0:5678
+      volumes:
+        - ./mywebapp:/appcode
+      ports:
+        - "5678:5678"
+      networks:
+        - networktier
+      depends_on:
+        - mongo-service
+      links:
+        - mongo-service
+      restart: always
+
+    mongo-service:
+      container_name: ctn-mongo
+      image: mongo:4.2.0
+      environment:
+        - MONGO_DATA_DIR=/data/db
+        - MONGO_LOG_DIR=/dev/null
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=123456789
+        - MONGO_INITDB_DATABASE=admin
+        - MONGO_ROOT_USER=root
+        - MONGO_ROOT_PASS=123456789
+      volumes:
+        - ./database/db:/data/db
+        - ./database/*.js:/data/db/*.js
+      hostname: mongo-service
+      ports:
+        - "27017:27017"
+      command: --storageEngine wiredTiger
+      networks:
+        - networktier
+      restart: always
+
+    nginx-service: 
+      container_name: ctn-nginx
+      image: nginx:latest
+      ports:
+        - "7777:8888"
+      volumes:
+        - ./webserver/nginx-mywebapp.conf:/etc/nginx/conf.d/nginx-mywebapp.conf
+      networks:
+        - networktier
+      depends_on:
+        - mongo-service
+        - django-service
+      links:
+        - mongo-service
+        - django-service
+      restart: always
+
+networks:
+  networktier:
+    driver: bridge

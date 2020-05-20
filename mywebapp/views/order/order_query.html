@@ -1,0 +1,70 @@
+<!---
+layout: examples
+title: Jumbotron Template
+extra_css: "jumbotron.css"
+--->
+
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Order Query){% endblock %}
+
+{% block content %}
+<main role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h2 class="display-5">Order : Query</h2>
+      <p>All fields are required. No validation now.</p>
+    </div>
+  </div>
+ 
+  <div class="container">
+    <!-- Example row of columns -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Order Id</th>
+          <th scope="col">Price</th>
+          <th scope="col">Discount</th>
+          <th scope="col">Payment</th>
+          <th scope="col">Status</th>
+          <th scope="col">Update Time</th>
+          <th scope="col">Manage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if receiveddata %}
+          <p class="text-right">Total {{ receiveddata|length }} records.</p>
+          {% for dataitem in receiveddata %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ dataitem.objectid }}</td>
+              <td>{{ dataitem.totalprice }}</td>
+              <td>{{ dataitem.totaldiscount }}</td>
+              <td>{{ dataitem.payment }}</td>
+              <td>{{ order_status|dict_key:dataitem.status }}</td>
+              <td>{{ dataitem.lastupdate }}</td>
+              <td>
+                <a class="btn btn-outline-primary" href="{% url 'order_detail' dataitem.objectid %}" role="button">Detail</a>
+              </td>
+          </tr>
+          {% endfor %}
+
+        {% else %}
+          <p class="text-right">Total 0 records.</p>
+        {% endif %}
+      </tbody>
+    </table>
+    <hr>
+  </div> <!-- /container -->
+
+
+</main>
+<script type="text/javascript">
+
+
+</script>
+{% endblock %}
+

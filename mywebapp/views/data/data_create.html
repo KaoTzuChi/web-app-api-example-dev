@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Data Create){% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h2 class="display-5">Data Management : Create</h2>
+    <p>All fields are required. No validation now.</p>    
+  </div>
+</div>
+<div class="container">
+    <div class="row">
+
+      <div class="col-md order-md-1">
+        <h4 class="mb-3">Data Input</h4>
+        {% if receiveddata %}
+       
+        <form class="needs-validation" action="/data/create_action/" method="post" novalidate>
+            {% csrf_token %}
+
+        <input type="hidden" class="form-control" id="objectid" name="objectid" placeholder="" value="{{ receiveddata.objectid }}" required>
+          <div class="mb-3">
+            <label for="field11">Field11 : String</label>
+              <input type="text" class="form-control" id="field11" name="field11" placeholder="" value="{{ receiveddata.field11 }}" required>
+              <div class="invalid-feedback">
+                Valid first name is required.
+              </div>
+            <!--<div class="col-md-6 mb-3">
+              <label for="lastName">Last name</label>
+              <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid last name is required.
+              </div>
+            </div>-->
+          </div>
+  
+          <div class="mb-3">
+            <label for="field12">Field12 : Dictionary</label>
+            {% for k in receiveddata.field12 %}
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">{{ k }}</span>
+                    </div>
+                    <input type="text" class="form-control" id="field12.{{ k }}" name="field12.{{ k }}" value="{{ receiveddata.field12|dict_key:k }}" placeholder="" required>
+                    <div class="invalid-feedback" style="width: 100%;">
+                      Your field12 is required.
+                    </div>
+                </div>
+            {% endfor %}
+
+          </div>
+
+          <div class="mb-3">
+            <label for="field13">Field13 : Datetime</label>
+            <select class="custom-select d-block w-100" id="field13" name="field13" required>
+                <option value="">Choose...</option>
+                {% for selopt in seloptions %}
+                    {% if selopt == receiveddata.field13 %}
+                    <option value="{{ selopt }}" selected>{{ selopt }}</option>
+                    {% else %}
+                    <option value="{{ selopt }}" >{{ selopt }}</option>
+                    {% endif %}
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid country.
+              </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="field14">Field14 : Number</label>
+            {% for rdoopt in rdooptions %}
+              {% if rdoopt == receiveddata.field14 %}
+              <div class="custom-control custom-radio">
+                <input id="field14{{ rdoopt }}" name="field14" type="radio" value="{{ rdoopt }}" class="custom-control-input" required checked>
+                <label class="custom-control-label" for="field14{{ rdoopt }}">{{ rdoopt }}</label>
+              </div>
+              {% else %}
+              <div class="custom-control custom-radio">
+                <input id="field14{{ rdoopt }}" name="field14" type="radio" value="{{ rdoopt }}" class="custom-control-input" required>
+                <label class="custom-control-label" for="field14{{ rdoopt }}">{{ rdoopt }}</label>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <hr class="mb-4">
+          <h4 class="mb-3">Field15 : List</h4>
+          {% for chkopt in chkoptions %}
+            {% if chkopt in receiveddata.field15 %}
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="field15{{ chkopt }}"  name="field15" value="{{ chkopt }}" checked>
+                <label class="custom-control-label" for="field15{{ chkopt }}">value {{ chkopt }}</label>
+            </div>
+            {% else %}
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="field15{{ chkopt }}" name="field15" value="{{ chkopt }}" >
+                <label class="custom-control-label" for="field15{{ chkopt }}">value {{ chkopt }}</label>
+            </div>
+            {% endif %}
+          {% endfor %}
+
+          <br />
+          <hr class="mb-4">
+          <button class="btn btn-primary" type="submit">Create</button>
+          <a class="btn btn-primary" href="{% url 'data_query' %}" role="button">Cancel</a>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    <br />
+<hr />
+{% endblock %}

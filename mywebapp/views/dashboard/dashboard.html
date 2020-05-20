@@ -1,0 +1,210 @@
+<!---
+layout: examples
+title: Dashboard Template
+extra_css: "dashboard.css"
+extra_js:
+  - "https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"
+  - "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"
+  - "dashboard.js"
+--->
+
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Dashboard){% endblock %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">&nbsp;</li>
+          <li class="nav-item">
+            <a class="nav-link active" id="linkshowchart1">
+              <span data-feather="home"></span>
+              Line Chart<span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart2">
+              <span data-feather="file"></span>
+              Pie Chart
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart3">
+              <span data-feather="shopping-cart"></span>
+              Doughnut Chart
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart4">
+              <span data-feather="users"></span>
+              Scatter Chart
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart5">
+              <span data-feather="bar-chart-2"></span>
+              Curvy Chart
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart6">
+              <span data-feather="layers"></span>
+              Radar Chart
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart7">
+              <span data-feather="file"></span>
+              Bar Chart
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart8">
+              <span data-feather="file"></span>
+              Polar Chart
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="linkshowchart9">
+              <span data-feather="file"></span>
+              Bubble Chart
+            </a>
+          </li>
+        </ul>
+
+        <!--
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Saved reports</span>
+          <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+            <span data-feather="plus-circle"></span>
+          </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Current month
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Last quarter
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Social engagement
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Year-end sale
+            </a>
+          </li>
+        </ul>
+        -->
+      </div>
+    </nav>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>
+        <!--
+          <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+          </button>
+        </div>
+        -->
+      </div>
+
+      <canvas id="myChart" class="my-4 w-100" width="900" height="380"></canvas>
+      <canvas id="pieChart"></canvas>
+      <canvas id="doughnutChart"></canvas>
+      <canvas id="scatterChart"></canvas>
+      <canvas id="lineChart"></canvas>
+      <canvas id="radarChart"></canvas>
+      <canvas id="barChart"></canvas>
+      <canvas id="polarChart"></canvas>
+      <canvas id="bubbleChart"></canvas>
+
+      <h2>Section title</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm" id="testtable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Header</th>
+              <th>Header</th>
+              <th>Header</th>
+              <th>Header</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if receiveddata %}
+              {% for dataitem in receiveddata %}
+              <tr>
+                <td>{{ dataitem.field31 }}</td>
+                <td>{{ dataitem.field32 }}</td>
+                <td>{{ dataitem.field33 }}</td>
+                <td>{{ dataitem.field34 }}</td>
+                <td>{{ dataitem.field35 }}</td>
+              </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script type="text/javascript" src="{% static 'dashboard.js' %}" ></script>
+<script type="text/javascript">
+
+  document.getElementById('linkshowchart1').addEventListener('click', function (){
+    showchart1();
+  });
+  document.getElementById('linkshowchart2').addEventListener('click', function (){
+    showchart2();
+  });
+  document.getElementById('linkshowchart3').addEventListener('click', function (){
+    showchart3();
+  });
+  document.getElementById('linkshowchart4').addEventListener('click', function (){
+    showchart4();
+  });
+  document.getElementById('linkshowchart5').addEventListener('click', function (){
+    showchart5();
+  });
+  document.getElementById('linkshowchart6').addEventListener('click', function (){
+    showchart6();
+  });
+  document.getElementById('linkshowchart7').addEventListener('click', function (){
+    showchart7();
+  });
+  document.getElementById('linkshowchart8').addEventListener('click', function (){
+    showchart8();
+  });
+  document.getElementById('linkshowchart9').addEventListener('click', function (){
+    showchart9();
+  });
+  </script>
+{% endblock %}
+
+

@@ -1,0 +1,108 @@
+<!---
+layout: examples
+title: Jumbotron Template
+extra_css: "jumbotron.css"
+--->
+
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Home){% endblock %}
+
+{% block content %}
+<main role="main">
+  {% if receiveddata %}
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">{{ receiveddata.title }}</h1>
+      <p>{{ receiveddata.brief }} {{ receiveddata.contact }} {{ receiveddata.location }} {{ receiveddata.lastupdate }}</p>
+      {% if request.user.is_authenticated %}
+      <p>
+        
+        <form class="form-signin " action="/product/addtocart/" method="post" novalidate >
+          {% csrf_token %}
+          <a class="btn btn-primary btn-lg" href="{% url 'product_query' %}" role="button">Back to products</a>&nbsp;
+          <input type="hidden" id="objectid" name="objectid" value="{{ receiveddata.objectid }}">
+          <input type="hidden" id="productname" name="productname" value="{{ receiveddata.title }}">
+          <input type="hidden" id="price" name="price" value="{{ receiveddata.price }}">
+          <input type="hidden" id="pagename" name="pagename" value="detail/{{ receiveddata.objectid }}">
+          <button role="button" class="btn btn-primary btn-lg"> Add to cart  &raquo;</button>
+        </form>
+      </p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+      {% for tagvalue in receiveddata.tags %}
+      <div class="col-md-4">
+        <h2>{{ tagvalue }}</h2>
+        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+        <p>&nbsp;</p>
+      </div>
+      {% endfor %}
+      
+    </div>
+    <div >
+      <h3>My Google Maps Demo</h3>
+      <div id="map"></div>
+      <script>
+        /*
+        var map;
+        function initMap1() {
+          map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+          });
+        }
+
+        // Initialize and add the map
+        function initMap() {
+          // The location of Uluru
+          var uluru = {lat: -25.344, lng: 131.036};
+          // The map, centered at Uluru
+          var map = new google.maps.Map(
+              document.getElementById('map'), {zoom: 4, center: uluru});
+          // The marker, positioned at Uluru
+          var marker = new google.maps.Marker({position: uluru, map: map});
+        }
+        */
+
+        var geocoder;
+        var map;
+        var address = "11008台北市信義區市府路1號";
+        function initMap() {
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 8,
+            center: {lat: -34.397, lng: 150.644}
+          });
+          geocoder = new google.maps.Geocoder();
+          codeAddress(geocoder, map);
+        }
+
+        function codeAddress(geocoder, map) {
+          geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+              map.setCenter(results[0].geometry.location);
+              var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+              });
+            } else {
+              alert('Geocode was not successful for the following reason: ' + status);
+            }
+          });
+        }
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBou_sKyBn-AuzK4RCy_wYlHFcjoCzgyew&callback=initMap" async defer>
+    </script>
+    </div>
+    <hr>
+
+  </div> <!-- /container -->
+  {% endif %}
+</main>
+{% endblock %}
+

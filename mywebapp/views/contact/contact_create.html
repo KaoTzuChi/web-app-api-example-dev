@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block title %}(App Title){% endblock %}
+{% block pagetitle %}(Page Title : Contact Create){% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <div class="container">
+    <h2 class="display-5">Contact Us : Create</h2>
+    <p>All fields are required. No validation now.</p>    
+  </div>
+</div>
+
+<div class="container text-center">
+  {% if create_data %}
+  <form class="form-signin " action="/contact/sendmail/" method="post" novalidate >
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="subject" class="sr-only">User Name</label>
+      <input type="text" id="subject" name="subject" value="{{ create_data.subject }}" placeholder="subject" class="form-control" required autofocus {{ create_tag }} >
+    </div>
+    <div class="mb-3">
+      <label for="content" class="sr-only">Password</label>
+      <textarea class="form-control" id="content" name="content" placeholder="content" rows="8" required {{ create_tag }} >{{ create_data.content }}</textarea>
+    </div>
+   
+    <input type="hidden" id="sender" name="sender" value="{{ create_data.sender }}">
+    <input type="hidden" id="receiver" name="receiver" value="{{ create_data.receiver }}">
+    <input type="hidden" id="cclist" name="cclist" value="{{ create_data.cclist }}">
+
+    {% if create_msg %}
+    <div class="alert alert-info" role="alert">
+      {{ create_msg }}
+    </div>
+    {% endif %}
+    <br />
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit" {{ create_tag }} >Create</button>
+
+  </form>
+  <br />
+  <hr />
+  {% endif %}
+</div>
+
+
+{% endblock %}
